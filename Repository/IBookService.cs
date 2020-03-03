@@ -10,6 +10,7 @@ namespace SampleWebAPI.Repository
         BookModel GetBook(int BookId);
         IEnumerable<BookModel> GetBook(string keyword);
         Task<BookModel> AddNewBook(BookModel bookModel);
+        Task<BookModel> UpdateBook(BookModel bookModel);
         Task<bool> DeleteBook(int bookId);
     }
 }

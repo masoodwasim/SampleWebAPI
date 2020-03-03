@@ -1,4 +1,5 @@
-﻿using SampleWebAPI.DBContext;
+﻿using Microsoft.EntityFrameworkCore;
+using SampleWebAPI.DBContext;
 using SampleWebAPI.DBModels;
 using System;
 using System.Collections.Generic;
@@ -67,6 +68,32 @@ namespace SampleWebAPI.Repository
                        where m.Title.Contains(keyword)
                        select m;
             return book.ToList();
+        }
+
+        public async Task<BookModel> UpdateBook(BookModel bookModel)
+        { 
+            _context.Attach(bookModel).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+                return bookModel;
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!BookModelExists(bookModel.ID))
+                {
+                    return bookModel;
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
+        private bool BookModelExists(int id)
+        {
+            return _context.BooksDbSet.Any(e => e.ID == id);
         }
     }
 
